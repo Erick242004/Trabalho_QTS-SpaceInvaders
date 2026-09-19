@@ -11,11 +11,11 @@
 
 | Integrante | Matrícula | Responsabilidade Principal | Classe Complexa Atribuída ($\text{CC} \ge 10$) |
 | :--- | :--- | :--- | :--- |
-| **Breno Carvalho** | 123083015 | `[Responsabilidade]` | `[Nome da Classe]` |
-| **Erick Bessa** | 122083063 | `[Responsabilidade]` | `[Nome da Classe]` |
-| **Leon Stevans** | 123083047 | `[Responsabilidade]` | `[Nome da Classe]` |
-| **Luiz Eduardo** | 123083019 | `[Responsabilidade]` | `[Nome da Classe]` |
-| **Roger Egito** | 220083118 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Breno Carvalho** | 123083015 | `Testador` | `Level2State` |
+| **Erick Bessa** | 122083063 | `Testador` | `Level1State` |
+| **Leon Stevans** | 123083047 | `Projetista de Teste/ Testador` | `Game` |
+| **Luiz Eduardo** | 123083019 | `Testador` | `Ship` |
+| **Roger Egito** | 220083118 | `Testador` | `AudioPlayer` |
 
 ---
 
