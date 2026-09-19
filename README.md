@@ -12,10 +12,10 @@
 | Integrante | Matrícula | Responsabilidade Principal | Classe Complexa Atribuída ($\text{CC} \ge 10$) |
 | :--- | :--- | :--- | :--- |
 | **Breno Carvalho** | 123083015 | `[Responsabilidade]` | `[Nome da Classe]` |
-| **Erick Bessa** | 000000000 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Erick Bessa** | 122083063 | `[Responsabilidade]` | `[Nome da Classe]` |
 | **Leon Stevans** | 123083047 | `[Responsabilidade]` | `[Nome da Classe]` |
-| **Luiz Eduardo** | 000000000 | `[Responsabilidade]` | `[Nome da Classe]` |
-| **Roger Egito** | 000000000 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Luiz Eduardo** | 123083019 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Roger Egito** | 220083118 | `[Responsabilidade]` | `[Nome da Classe]` |
 
 ---
 
@@ -30,14 +30,14 @@ O projeto escolhido é o jogo **Space Invaders**, desenvolvido em Java com Arqui
 Todas as entregas estão organizadas na branch principal (`main` / `master`) conforme os requisitos da disciplina.
 
 ### Documentação Geral e Logs
-* **Plano de Teste:** [Link para o Google Docs]()
+* **Plano de Teste:** [Docs](https://docs.google.com/document/d/1kktI82aWBj7p4GrCMSzNBMWDEArWQh54ub-EJuK4X20/edit?usp=sharing)
 * **Registro de Uso de IA:** [AI-LOG](docs/ai/AI-LOG.md)
 * **Slides de Apresentação:** [Slides](docs/slides/)
 
 ---
 
 ### Entrega 1 (Peso 3) — *Prazo: 06/10/2025*
-* [ ] **Descrição do Escopo:** Incluído no documento do [Plano de Teste]().
+* [x] **Descrição do Escopo:** Incluído no documento do [Plano de Teste](https://docs.google.com/document/d/1kktI82aWBj7p4GrCMSzNBMWDEArWQh54ub-EJuK4X20/edit?usp=sharing).
 * [x] **Código-fonte Original:** Preservado na estrutura inicial do repositório.
 * [ ] **Casos de Teste Unitários Iniciais:** Localizados em `src/test/java/...`
 * [ ] **Casos de Testes Manuais:**
