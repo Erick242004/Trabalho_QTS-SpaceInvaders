@@ -1,16 +1,69 @@
-# Game Space Invaders
-Objetivo do projeto era criar um jogo no estilo de Space Invaders utilizando os conceitos aprendidos na disciplina de programa��o orientada a objetos.
-Assim sendo, as classes foram separadas de acordo com suas responsabilidades dentro dos pacotescada classe do jogo tem uma responsabilidade.
-A **Launch** � respons�vel pela execu��o do programa, ela cont�m o main.
-J� o jogo em si est� na classe **Game**.
-Nela s�o instanciados dois objetos, um da classe Display e e outro da classe Thread. Para podermos utilizar a *Thread* precisamos implementar a interface *Runnable* que pede o uso do m�todo run().
-O Display � quem cria a tela do jogo atrav�s do objeto JFrame, assim � poss�vel colocar um t�tulo a janela, redimensionar a tela, adicionar elementos, entre outros.
-Outro objeto usado no Display � o Canvas, que define a area de pintura da tela e fica responsavel por pintar os elementos na tela.
+# Trabalho Prático - Qualidade e Teste de Software
 
+> **Disciplina:** Qualidade e Teste de Software  
+> **Sistema Sob Teste (SUT):** Space Invaders (Java)  
+> **Repositório Original:** [Upstream](https://github.com/repo-software-testing-courses/gameSpaceInvaders)  
+> **Repositório Fork / Grupo:** [Trabalho](https://github.com/noidnoidnoid/Trabalho_QTS-SpaceInvaders)
 
-Resolvendo o problema da pintura
-O computador tem muitos ciclos por segundo, e assim n�o conseguimos ver a pintura da tela.
-Usando a thread para separar os programa faz com que possamos ver
-O metodo run() fica com a parte de pintura da tela. Ela comeca quando chamado pelo metodo start() e para atraves do metodo stop()
+---
 
-Assim, o inicio do jogo se d� a partir da instancia��o de um objeto da classe *Game* em *Launch*.
+## Equipe e Responsabilidades
+
+| Integrante | Matrícula | Responsabilidade Principal | Classe Complexa Atribuída ($\text{CC} \ge 10$) |
+| :--- | :--- | :--- | :--- |
+| **Breno Carvalho** | 123083015 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Erick Bessa** | 000000000 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Leon Stevans** | 123083047 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Luiz Eduardo** | 000000000 | `[Responsabilidade]` | `[Nome da Classe]` |
+| **Roger Egito** | 000000000 | `[Responsabilidade]` | `[Nome da Classe]` |
+
+---
+
+## Visão Geral do Sistema Sob Teste (SUT)
+
+O projeto escolhido é o jogo **Space Invaders**, desenvolvido em Java com Arquitetura Orientada a Objetos e manipulação de multithreading para renderização contínua de gráficos em tempo real via Canvas/JFrame (`60 FPS`).
+
+---
+
+## Índice de Artefatos e Entregáveis
+
+Todas as entregas estão organizadas na branch principal (`main` / `master`) conforme os requisitos da disciplina.
+
+### Documentação Geral e Logs
+* **Plano de Teste:** [Link para o Google Docs]()
+* **Registro de Uso de IA:** [AI-LOG](docs/ai/AI-LOG.md)
+* **Slides de Apresentação:** [Slides](docs/slides/)
+
+---
+
+### Entrega 1 (Peso 3) — *Prazo: 06/10/2025*
+* [ ] **Descrição do Escopo:** Incluído no documento do [Plano de Teste]().
+* [x] **Código-fonte Original:** Preservado na estrutura inicial do repositório.
+* [ ] **Casos de Teste Unitários Iniciais:** Localizados em `src/test/java/...`
+* [ ] **Casos de Testes Manuais:**
+  * Cenário exportado do **TestLink**: [`PDF`](docs/manual-tests/testlink-scenario.pdf)
+  * Demais casos de teste manuais: [`XLSX`](docs/manual-tests/test-cases-sheet.xlsx)
+* [ ] **Registro de Bugs / Bugs Tracking:** [Aba Issues do Repositório](../../issues)
+
+---
+
+### Entrega 2 (Peso 5) — *Prazo Final*
+* [ ] **Testes Unitários Evoluídos & Testes de Integração:** Isolamento de dependências (`Mocks`/`Stubs`) em `src/test/java/...`.
+* [ ] **Métricas de Qualidade ISO 25010:** Relatório e justificativas no [Plano de Teste](https://docs.google.com/document/d/).
+* [ ] **Testes Automatizados de Sistema:** Requisitos funcionais e não-funcionais em `src/test/java/system/...`.
+* [ ] **Cobertura Estrutural ($\ge 80\%$ Todas-Arestas):** Relatório JaCoCo/HTML disponível em [`docs/reports/coverage/`](docs/reports/coverage/).
+* [ ] **Teste Baseado em Defeitos ($\ge 80\%$ Escore de Mutação):** Relatório Pitest disponível em [`docs/reports/mutation/`](docs/reports/mutation/).
+* [ ] **Inspeção de Código (SonarQube/SonarCloud):**
+  * Evidências antes das correções: [`docs/sonar/before/`](docs/sonar/before/)
+  * Evidências após as correções: [`docs/sonar/after/`](docs/sonar/after/)
+
+---
+
+## Ferramentas Utilizadas
+
+* **Linguagem:** Java (JDK 17+)
+* **Build & Dependências:** Maven / Gradle
+* **Framework de Testes:** JUnit 5, Mockito, PIT Mutation Testing, JaCoCo
+* **Automação de Sistema:** Selenium / Robot / TestNG
+* **Análise Estática:** SonarQube / SonarCloud
+* **Gestão de Testes Manuais:** TestLink
