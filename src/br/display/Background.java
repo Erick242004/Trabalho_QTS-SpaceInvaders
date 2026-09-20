@@ -20,7 +20,7 @@ public class Background {
 		try {
 			img = ImageIO.read(new File("src/fundo.png"));
 		} catch (IOException e) {
-			System.out.println("Não foi possível carregar a imagem de fundo");
+			System.out.println("Nï¿½o foi possï¿½vel carregar a imagem de fundo");
 			e.printStackTrace();
 		}
 	}
