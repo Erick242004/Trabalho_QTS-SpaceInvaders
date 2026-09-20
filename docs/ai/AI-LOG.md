@@ -20,6 +20,17 @@ Este documento registra de forma transparente e auditável as interações subst
 * **Decisão:** Aceito integralmente. O formato e os campos atendem às exigências do edital da disciplina.
 * **Validação:** Verificado manualmente se a estrutura criada atende aos requisitos de visibilidade dos artefatos na branch principal, regras de transparência de IA e suporte ao rastreamento de links dos documentos no Google Docs.
 
+### Interação #002 — Criação do Cenário de Teste Manual (TestLink) para a classe Game
+* **Data:** 19/09/2026
+* **Responsável:** Leon
+* **Atividade:** Escrita estruturada do Plano, Suíte e Casos de Teste manuais no TestLink focados no Game Loop e Multithreading.
+* **Ferramenta:** Gemini
+* **Prompt/Instrução Utilizada:**
+  > *"Eu fiquei com a classe Game e vou usá-la pra documentar o cenário de teste no Testlink. Eu já criei o projeto, o plano e a suíte. Me ajude com os passos do caso de teste."*
+* **Resultado:** Geração da árvore hierárquica exigida pelo TestLink (Plano de Execução, Suíte ST01 e Caso de Teste CT01.01). Foram criados passos de execução focando na validação do frame rate de 60 FPS, gerenciamento de threads (start/join) e renderização dos gráficos (BufferStrategy).
+* **Decisão:** Aceito sem alterações. Os passos gerados refletem fielmente a lógica interna da classe Game.java para um teste de caixa-preta / sistema.
+* **Validação:** As informações foram inseridas na interface do TestLink e a formatação de pré-condições e resultados esperados se comportou adequadamente na geração do relatório em PDF da ferramenta.
+
 ---
 
 ## Modelo para Novas Entradas (Template)

@@ -41,8 +41,8 @@ Todas as entregas estão organizadas na branch principal (`main` / `master`) con
 * [x] **Código-fonte Original:** Preservado na estrutura inicial do repositório.
 * [ ] **Casos de Teste Unitários Iniciais:** Localizados em `src/test/java/...`
 * [ ] **Casos de Testes Manuais:**
-  * Cenário exportado do **TestLink**: [`PDF`](docs/manual-tests/testlink-scenario.pdf)
-  * Demais casos de teste manuais: [`XLSX`](docs/manual-tests/test-cases-sheet.xlsx)
+  * [x] Cenário exportado do **TestLink**: [`PDF`](docs/manual-tests/CT01-GameLoop-TestLink.pdf)
+  * [ ] Demais casos de teste manuais: [`XLSX`](docs/manual-tests/test-cases-sheet.xlsx)
 * [ ] **Registro de Bugs / Bugs Tracking:** [Aba Issues do Repositório](../../issues)
 
 ---
