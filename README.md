@@ -36,7 +36,7 @@ Todas as entregas estão organizadas na branch principal (`main` / `master`) con
 
 ---
 
-### Entrega 1 (Peso 3) — *Prazo: 06/10/2025*
+### Entrega 1 (Peso 3) — *Prazo: 21/09/2026*
 * [x] **Descrição do Escopo:** Incluído no documento do [Plano de Teste](https://docs.google.com/document/d/1kktI82aWBj7p4GrCMSzNBMWDEArWQh54ub-EJuK4X20/edit?usp=sharing).
 * [x] **Código-fonte Original:** Preservado na estrutura inicial do repositório.
 * [ ] **Casos de Teste Unitários Iniciais:** Localizados em `src/test/java/...`
@@ -47,7 +47,7 @@ Todas as entregas estão organizadas na branch principal (`main` / `master`) con
 
 ---
 
-### Entrega 2 (Peso 5) — *Prazo Final*
+### Entrega 2 (Peso 5) — *23/11/2026*
 * [ ] **Testes Unitários Evoluídos & Testes de Integração:** Isolamento de dependências (`Mocks`/`Stubs`) em `src/test/java/...`.
 * [ ] **Métricas de Qualidade ISO 25010:** Relatório e justificativas no [Plano de Teste](https://docs.google.com/document/d/).
 * [ ] **Testes Automatizados de Sistema:** Requisitos funcionais e não-funcionais em `src/test/java/system/...`.
