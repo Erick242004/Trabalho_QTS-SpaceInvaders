@@ -2,11 +2,25 @@ package br.characters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
 
+import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +28,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
 
 import br.Game;
 
@@ -94,6 +109,46 @@ class ShipTest {
             assertNotNull(ship.img, "imagem nao carregada: confira o workingDirectory do surefire");
             assertEquals(LARGURA_IMG, ship.img.getWidth());
             assertEquals(ALTURA_IMG, ship.img.getHeight());
+        }
+
+        @Test
+        @DisplayName("quando o PNG nao pode ser lido, a nave e criada sem imagem")
+        void tolerariaFalhaDeLeituraDaImagem() {
+            // Caminho de excecao de load(). Mockito 5 usa o inline mock maker por
+            // padrao, o que permite interceptar o metodo estatico ImageIO.read
+            // sem tocar no SUT. Isola o teste do sistema de arquivos e cobre o
+            // unico bloco de Ship que os demais casos nao alcancam.
+            PrintStream saidaOriginal = System.out;
+            PrintStream erroOriginal = System.err;
+            ByteArrayOutputStream saidaCapturada = new ByteArrayOutputStream();
+            // load() tambem faz e.printStackTrace(); a saida de erro e capturada em vez
+            // de descartada, senao o mutante que remove essa chamada sobrevive.
+            ByteArrayOutputStream erroCapturado = new ByteArrayOutputStream();
+
+            Ship naveSemImagem;
+            try {
+                System.setOut(new PrintStream(saidaCapturada));
+                System.setErr(new PrintStream(erroCapturado));
+
+                try (MockedStatic<ImageIO> imageIO = mockStatic(ImageIO.class)) {
+                    imageIO.when(() -> ImageIO.read(any(File.class)))
+                           .thenThrow(new IOException("arquivo de imagem ausente"));
+
+                    naveSemImagem = new Ship();
+                }
+            } finally {
+                System.setOut(saidaOriginal);
+                System.setErr(erroOriginal);
+            }
+
+            assertNull(naveSemImagem.img, "load() deve engolir a IOException e deixar img nulo");
+            assertTrue(saidaCapturada.toString().contains("carregar a imagem da nave"),
+                    "load() deve avisar na saida padrao");
+            assertTrue(erroCapturado.toString().contains("arquivo de imagem ausente"),
+                    "load() deve registrar a excecao na saida de erro");
+            // O construtor termina mesmo sem a imagem: a nave continua utilizavel.
+            assertEquals(X_INICIAL, naveSemImagem.getX());
+            assertTrue(naveSemImagem.getShots().isEmpty());
         }
     }
 
@@ -340,6 +395,46 @@ class ShipTest {
             ship.getShots().clear();
 
             assertTrue(ship.getShots().isEmpty());
+        }
+    }
+
+    @Nested
+    @DisplayName("paint(Graphics)")
+    class Pintura {
+
+        @Test
+        @DisplayName("desenha a imagem no retangulo de destino correto")
+        void desenhaNoDestinoCorreto() {
+            Graphics g = mock(Graphics.class);
+
+            ship.paint(g);
+
+            // Ship.java:41 -> drawImage(img, x, 930, x + 100, 1030, 0, 0, 444, 512, null)
+            verify(g).drawImage(
+                    eq(ship.img),
+                    eq(X_INICIAL), eq(Y_FIXO),
+                    eq(X_INICIAL + LARGURA_NAVE), eq(Y_FIXO + LARGURA_NAVE),
+                    eq(0), eq(0),
+                    eq(LARGURA_IMG), eq(ALTURA_IMG),
+                    isNull());
+        }
+
+        @Test
+        @DisplayName("acompanha a nave depois de um movimento")
+        void acompanhaMovimento() {
+            Graphics g = mock(Graphics.class);
+            ship.moveShip(-1);
+            int x = X_INICIAL - VELOCIDADE;
+
+            ship.paint(g);
+
+            verify(g).drawImage(
+                    eq(ship.img),
+                    eq(x), eq(Y_FIXO),
+                    eq(x + LARGURA_NAVE), eq(Y_FIXO + LARGURA_NAVE),
+                    eq(0), eq(0),
+                    eq(LARGURA_IMG), eq(ALTURA_IMG),
+                    isNull());
         }
     }
 }
