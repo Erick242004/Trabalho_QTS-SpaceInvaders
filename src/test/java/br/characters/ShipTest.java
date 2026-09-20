@@ -2,7 +2,11 @@ package br.characters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.awt.Rectangle;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +41,9 @@ class ShipTest {
     /** Campo privado movex de Ship. */
     private static final int VELOCIDADE = 6;
 
+    /** A nave nao se move em Y. */
+    private static final int Y_FIXO = Game.HEIGHT - 150;        // 930
+
     /** Valor fixo devolvido por getShipWidth(), que NAO e a largura da imagem. */
     private static final int LARGURA_NAVE = 100;
 
@@ -51,6 +58,13 @@ class ShipTest {
 
     @BeforeEach
     void preparar() {
+        // Shot.isVisible e Shot.velocity sao static (ver Bug #1 e Bug #2 no
+        // registro de bugs). Qualquer teste que crie um tiro contamina os
+        // demais, entao o estado global e zerado antes de cada caso para que a
+        // suite nao dependa da ordem de execucao.
+        Shot.setVisible(false);
+        Shot.setVelocity(7);
+
         ship = new Ship();
     }
 
@@ -196,6 +210,136 @@ class ShipTest {
             ship.limits();
 
             assertEquals(0, ship.getX());
+        }
+    }
+
+    @Nested
+    @DisplayName("Posicao e dimensoes")
+    class PosicaoEDimensoes {
+
+        @Test
+        @DisplayName("getY() devolve uma altura fixa de 930")
+        void getYEhFixo() {
+            assertEquals(Y_FIXO, ship.getY());
+        }
+
+        @Test
+        @DisplayName("getY() nao muda depois de movimentos horizontais")
+        void getYNaoMudaComMovimento() {
+            ship.moveShip(1);
+            ship.moveShip(1);
+            ship.moveShip(-1);
+
+            assertEquals(Y_FIXO, ship.getY());
+        }
+
+        @Test
+        @DisplayName("getShipWidth() devolve 100, e nao a largura da imagem")
+        void getShipWidthEhConstante() {
+            assertEquals(LARGURA_NAVE, ship.getShipWidth());
+            // A imagem tem 444px; o SUT usa a constante 100 e deixa
+            // img.getWidth() comentado em Ship.java:72.
+            assertEquals(LARGURA_IMG, ship.img.getWidth());
+        }
+    }
+
+    @Nested
+    @DisplayName("getBounds() - retangulo de colisao")
+    class Bounds {
+
+        @Test
+        @DisplayName("acompanha a posicao horizontal da nave")
+        void acompanhaPosicaoX() {
+            ship.moveShip(1);
+
+            Rectangle bounds = ship.getBounds();
+
+            assertEquals(X_INICIAL + VELOCIDADE, bounds.x);
+            assertEquals(Y_FIXO, bounds.y);
+        }
+
+        @Test
+        @DisplayName("tem a largura da nave")
+        void temLarguraDaNave() {
+            assertEquals(LARGURA_NAVE, ship.getBounds().width);
+        }
+
+        @Test
+        @DisplayName("BUG #3: a altura e 930 em vez de 100")
+        void alturaIncorretaDocumentada() {
+            // Ship.java:77 passa getY() como quarto argumento de Rectangle, que e
+            // a ALTURA, e nao a coordenada inferior. O retangulo de colisao da nave
+            // tem 100x930 e se estende muito abaixo da tela, o que faz a deteccao
+            // de colisao de Level1State e Level2State disparar cedo demais.
+            //
+            // Este caso registra o comportamento ATUAL de proposito: o defeito esta
+            // aberto nas Issues e o SUT nao foi corrigido nesta entrega. Quando a
+            // correcao entrar, o valor esperado passa a ser LARGURA_NAVE (100).
+            Rectangle bounds = ship.getBounds();
+
+            assertEquals(Y_FIXO, bounds.height, "comportamento defeituoso conhecido - ver Issue do Bug #3");
+        }
+    }
+
+    @Nested
+    @DisplayName("simpleShot() e getShots()")
+    class Tiros {
+
+        @Test
+        @DisplayName("adiciona um tiro na lista")
+        void adicionaUmTiro() {
+            ship.simpleShot();
+
+            assertEquals(1, ship.getShots().size());
+        }
+
+        @Test
+        @DisplayName("cria o tiro na posicao atual da nave")
+        void tiroNasceNaPosicaoDaNave() {
+            ship.moveShip(1);
+
+            ship.simpleShot();
+
+            Shot tiro = ship.getShots().get(0);
+            assertEquals(ship.getX(), tiro.getX());
+            assertEquals(ship.getY(), tiro.getY());
+        }
+
+        @Test
+        @DisplayName("chamadas sucessivas acumulam tiros")
+        void acumulaTiros() {
+            ship.simpleShot();
+            ship.simpleShot();
+            ship.simpleShot();
+
+            assertEquals(3, ship.getShots().size());
+        }
+
+        @Test
+        @DisplayName("tiros disparados de posicoes diferentes guardam x diferentes")
+        void tirosGuardamPosicoesDistintas() {
+            ship.simpleShot();
+            ship.moveShip(1);
+            ship.simpleShot();
+
+            List<Shot> tiros = ship.getShots();
+            assertEquals(X_INICIAL, tiros.get(0).getX());
+            assertEquals(X_INICIAL + VELOCIDADE, tiros.get(1).getX());
+        }
+
+        @Test
+        @DisplayName("getShots() expoe a lista interna, e nao uma copia")
+        void getShotsExpoeListaInterna() {
+            // Vazamento de encapsulamento: quem chama getShots() pode limpar a
+            // lista de tiros da nave. E exatamente o que Level1State e Level2State
+            // fazem ao remover tiros durante a renderizacao. Registrado como
+            // achado de manutenibilidade para a inspecao do Sonar na Entrega 2.
+            assertSame(ship.getShots(), ship.getShots());
+
+            ship.simpleShot();
+            ship.getShots().clear();
+
+            assertTrue(ship.getShots().isEmpty());
         }
     }
 }
