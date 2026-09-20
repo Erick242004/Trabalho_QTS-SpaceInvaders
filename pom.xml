@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>br.qts</groupId>
+  <artifactId>space-invaders</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>Space Invaders - SUT de Qualidade e Teste de Software</name>
+  <description>
+    Sistema Sob Teste do trabalho pratico da disciplina de Qualidade e Teste de
+    Software. O codigo-fonte original do jogo e preservado exatamente onde estava
+    (src/br/**); este pom apenas aponta o Maven para a estrutura existente.
+  </description>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+
+    <!-- ATENCAO: os fontes do jogo estao em ISO-8859-1, nao em UTF-8.
+         Do JDK 18 em diante o javac assume UTF-8 e quebra nos comentarios
+         acentuados do codigo original. Nao alterar sem reconverter os .java. -->
+    <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <junit.version>5.14.4</junit.version>
+    <mockito.version>5.23.0</mockito.version>
+
+    <!-- Valor padrao vazio: permite rodar o surefire sem o agente do JaCoCo. -->
+    <jacocoArgLine></jacocoArgLine>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Providers SPI de MP3, usados apenas em tempo de execucao por
+         br.audio.AudioPlayer. Substituem os JARs versionados em lib/
+         (jl1.0.1, mp3spi1.9.5, tritonus_share-0.3.6). -->
+    <dependency>
+      <groupId>com.googlecode.soundlibs</groupId>
+      <artifactId>mp3spi</artifactId>
+      <version>1.9.5.4</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.soundlibs</groupId>
+      <artifactId>jlayer</artifactId>
+      <version>1.0.1.4</version>
+      <scope>runtime</scope>
+      <exclusions>
+        <!-- O pom do jlayer declara junit 3.8.2 fora do escopo test, e ele vaza
+             para o classpath de teste. O surefire entao liga sozinho o engine
+             junit-vintage, que quebra na descoberta porque o JUnit 3.8.2 nao tem
+             org.junit.runner. Nada aqui usa JUnit 3/4. -->
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.soundlibs</groupId>
+      <artifactId>tritonus-share</artifactId>
+      <version>0.3.7.4</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Layout nao-padrao de proposito: o projeto e um projeto Eclipse herdado e
+         o edital exige que o codigo original seja preservado na estrutura inicial.
+         Nenhum arquivo de src/br/** foi movido. -->
+    <sourceDirectory>${project.basedir}/src</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+
+    <resources>
+      <!-- E o que faz br.audio.AudioPlayer achar /audio/theblackframe.mp3 no classpath. -->
+      <resource>
+        <directory>${project.basedir}/resources</directory>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.16.0</version>
+        <configuration>
+          <!-- sourceDirectory e src/, entao src/test/java cairia no compile
+               principal se nao for excluido aqui. -->
+          <excludes>
+            <exclude>test/java/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.6.0</version>
+        <configuration>
+          <!-- headless: os testes desenham em BufferedImage, sem abrir janela.
+               workingDirectory: o SUT carrega PNGs com new File("src/*.png"),
+               relativo ao diretorio de trabalho. -->
+          <!-- @{} (e nao ${}) porque a propriedade so e escrita pelo jacoco:prepare-agent
+               durante a execucao; ${} seria interpolado ainda na leitura do pom, com o
+               valor vazio, e o agente nunca seria anexado. -->
+          <argLine>@{jacocoArgLine} -Djava.awt.headless=true</argLine>
+          <workingDirectory>${project.basedir}</workingDirectory>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.15</version>
+        <configuration>
+          <propertyName>jacocoArgLine</propertyName>
+          <!-- Sai no padrao do Maven, target/site/jacoco, que o .gitignore ja cobre.
+               O relatorio e regerado a cada build; versionar isso daria conflito de
+               merge em HTML gerado. Copiar para docs/reports/coverage/ so na entrega. -->
+        </configuration>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Teste baseado em defeitos. O limiar de 80% e cobranca da Entrega 2;
+           por ora serve para ver quais mutantes de Ship sobrevivem. -->
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.30.0</version>
+        <configuration>
+          <targetClasses>
+            <param>br.characters.Ship</param>
+          </targetClasses>
+          <targetTests>
+            <param>br.characters.ShipTest</param>
+          </targetTests>
+          <outputFormats>
+            <param>HTML</param>
+            <param>XML</param>
+          </outputFormats>
+          <!-- Idem: sai em target/pit-reports. timestampedReports=false evita criar
+               uma subpasta nova a cada execucao. -->
+          <timestampedReports>false</timestampedReports>
+          <jvmArgs>
+            <value>-Djava.awt.headless=true</value>
+          </jvmArgs>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>1.2.3</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- mvn compile exec:java  -> abre o jogo -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.6.4</version>
+        <configuration>
+          <mainClass>br.Launch</mainClass>
+          <workingDirectory>${project.basedir}</workingDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
