@@ -43,7 +43,7 @@ Todas as entregas estão organizadas na branch principal (`main` / `master`) con
 * [ ] **Casos de Testes Manuais:**
   * [x] Cenário exportado do **TestLink**: [`PDF`](docs/manual-tests/CT01-GameLoop-TestLink.pdf)
   * [ ] Demais casos de teste manuais: [`XLSX`](docs/manual-tests/test-cases-sheet.xlsx)
-* [ ] **Registro de Bugs / Bugs Tracking:** [Aba Issues do Repositório](../../issues)
+* [x] **Registro de Bugs / Bugs Tracking:** [Aba Issues do Repositório](../../issues?q=is%3Aissue)
 
 ---
 
