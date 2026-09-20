@@ -73,10 +73,10 @@ class ShipTest {
 
     @BeforeEach
     void preparar() {
-        // Shot.isVisible e Shot.velocity sao static (ver Bug #1 e Bug #2 no
-        // registro de bugs). Qualquer teste que crie um tiro contamina os
-        // demais, entao o estado global e zerado antes de cada caso para que a
-        // suite nao dependa da ordem de execucao.
+        // Shot.isVisible e Shot.velocity sao static no SUT, defeito registrado
+        // nas Issues do repositorio. Qualquer teste que crie um tiro contamina
+        // os demais, entao o estado global e zerado antes de cada caso para que
+        // a suite nao dependa da ordem de execucao.
         Shot.setVisible(false);
         Shot.setVelocity(7);
 
@@ -332,7 +332,7 @@ class ShipTest {
             // correcao entrar, o valor esperado passa a ser LARGURA_NAVE (100).
             Rectangle bounds = ship.getBounds();
 
-            assertEquals(Y_FIXO, bounds.height, "comportamento defeituoso conhecido - ver Issue do Bug #3");
+            assertEquals(Y_FIXO, bounds.height, "comportamento defeituoso conhecido - ver Issues do repositorio");
         }
     }
 
