@@ -45,7 +45,7 @@ Este documento registra de forma transparente e auditável as interações subst
 * **Resultado:**
   1. `pom.xml` com JUnit 5, Mockito, JaCoCo e PIT, apontando o Maven para a estrutura de diretórios já existente — nenhum arquivo do código original foi movido ou alterado.
   2. `src/test/java/br/characters/ShipTest.java` com 32 casos, baseados em análise de valor limite.
-  3. Levantamento de 13 defeitos do SUT para abertura na aba Issues, e 16 casos de teste manuais em `docs/manual-tests/test-cases-sheet.csv`.
+  3. Levantamento de 13 defeitos do SUT para abertura na aba Issues, e o caso de teste de sistema da classe `Ship` em `docs/manual-tests/CT02-Ship-CasoDeTesteSistema.pdf`, no template da disciplina.
 * **Decisão:** **Aceito com alterações.** Corrigidos dois defeitos de configuração do build (exclusão do `junit` transitivo do `jlayer` e uso de `@{argLine}` no JaCoCo) e reforçada a suíte em duas iterações: cobertura de linhas de 90% para 100% e escore de mutação de 83% para 89%. Os dois mutantes restantes são **equivalentes por construção** em `limits()`, onde o valor de correção coincide com o de fronteira, de modo que nenhum teste pode distingui-los.
 * **Validação:** `mvn clean test` com 32 testes e 0 falhas, reexecutado em ordem aleatória para comprovar o isolamento entre os casos. JaCoCo: **100% de arestas** em `Ship`, contra 4% do projeto inteiro. PIT: **89%**, acima do limiar de 80% exigido na Entrega 2. `git status src/br` não acusa modificação, confirmando a preservação do código original. A execução do jogo revelou um defeito pré-existente que impede a inicialização em máquina sem placa de som, registrado nas Issues.
 
