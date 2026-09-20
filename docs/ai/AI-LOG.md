@@ -31,6 +31,24 @@ Este documento registra de forma transparente e auditável as interações subst
 * **Decisão:** Aceito sem alterações. Os passos gerados refletem fielmente a lógica interna da classe Game.java para um teste de caixa-preta / sistema.
 * **Validação:** As informações foram inseridas na interface do TestLink e a formatação de pré-condições e resultados esperados se comportou adequadamente na geração do relatório em PDF da ferramenta.
 
+### Interação #003 — Infraestrutura de Teste e Suíte Unitária da Classe `Ship`
+* **Data:** 19/09/2026 a 20/09/2026
+* **Responsável:** Luiz Eduardo
+* **Atividade:** Configuração do build de testes do projeto (Passo 2) e criação dos casos de teste unitários da classe complexa `Ship`. Levantamento inicial do registro de bugs e dos casos de teste manuais da mesma classe.
+* **Ferramenta:** Claude (Claude Code)
+* **Prompt/Instrução Utilizada:** Sessão iterativa, com as seguintes instruções na ordem em que foram dadas:
+  1. Analisar o repositório do trabalho e levantar o que precisa ser feito nele.
+  2. Restringir o escopo à classe `Ship`, atribuída a este integrante, mais a infraestrutura de teste reaproveitável pelo grupo — recusada a proposta da ferramenta de cobrir as cinco classes complexas de uma vez.
+  3. Não modificar o SUT: escrever apenas os testes, deixando a refatoração e a correção dos defeitos para etapa posterior.
+  4. Priorizar os itens da Entrega 1.
+  5. Justificar os 75 arquivos HTML que haviam sido gerados em `docs/reports/` e, diante da explicação, mover a saída dos relatórios para `target/`, evitando conflito de merge entre os cinco integrantes.
+* **Resultado:**
+  1. `pom.xml` com JUnit 5, Mockito, JaCoCo e PIT, apontando o Maven para a estrutura de diretórios já existente — nenhum arquivo do código original foi movido ou alterado.
+  2. `src/test/java/br/characters/ShipTest.java` com 32 casos, baseados em análise de valor limite.
+  3. Levantamento de 13 defeitos do SUT para abertura na aba Issues, e 16 casos de teste manuais em `docs/manual-tests/test-cases-sheet.csv`.
+* **Decisão:** **Aceito com alterações.** Corrigidos dois defeitos de configuração do build (exclusão do `junit` transitivo do `jlayer` e uso de `@{argLine}` no JaCoCo) e reforçada a suíte em duas iterações: cobertura de linhas de 90% para 100% e escore de mutação de 83% para 89%. Os dois mutantes restantes são **equivalentes por construção** em `limits()`, onde o valor de correção coincide com o de fronteira, de modo que nenhum teste pode distingui-los.
+* **Validação:** `mvn clean test` com 32 testes e 0 falhas, reexecutado em ordem aleatória para comprovar o isolamento entre os casos. JaCoCo: **100% de arestas** em `Ship`, contra 4% do projeto inteiro. PIT: **89%**, acima do limiar de 80% exigido na Entrega 2. `git status src/br` não acusa modificação, confirmando a preservação do código original. A execução do jogo revelou um defeito pré-existente que impede a inicialização em máquina sem placa de som, registrado nas Issues.
+
 ---
 
 ## Modelo para Novas Entradas (Template)

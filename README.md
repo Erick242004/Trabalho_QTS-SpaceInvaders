@@ -39,10 +39,12 @@ Todas as entregas estão organizadas na branch principal (`main` / `master`) con
 ### Entrega 1 (Peso 3) — *Prazo: 21/09/2026*
 * [x] **Descrição do Escopo:** Incluído no documento do [Plano de Teste](https://docs.google.com/document/d/1kktI82aWBj7p4GrCMSzNBMWDEArWQh54ub-EJuK4X20/edit?usp=sharing).
 * [x] **Código-fonte Original:** Preservado na estrutura inicial do repositório.
-* [ ] **Casos de Teste Unitários Iniciais:** Localizados em `src/test/java/...`
+* [ ] **Casos de Teste Unitários Iniciais:** Localizados em [`src/test/java/`](src/test/java/)
+  * [x] `Ship` — [`ShipTest`](src/test/java/br/characters/ShipTest.java) · 32 casos · **100% de cobertura de arestas** · 89% de escore de mutação
+  * [ ] `Game` · [ ] `AudioPlayer` · [ ] `Level1State` · [ ] `Level2State`
 * [ ] **Casos de Testes Manuais:**
   * [x] Cenário exportado do **TestLink**: [`PDF`](docs/manual-tests/CT01-GameLoop-TestLink.pdf)
-  * [ ] Demais casos de teste manuais: [`XLSX`](docs/manual-tests/test-cases-sheet.xlsx)
+  * [x] Casos de teste manuais da classe `Ship`: [`CSV`](docs/manual-tests/test-cases-sheet.csv) — 16 casos, 25 passos ([como importar](docs/manual-tests/README.md))
 * [x] **Registro de Bugs / Bugs Tracking:** [Aba Issues do Repositório](../../issues?q=is%3Aissue)
 
 ---
@@ -62,8 +64,51 @@ Todas as entregas estão organizadas na branch principal (`main` / `master`) con
 ## Ferramentas Utilizadas
 
 * **Linguagem:** Java (JDK 17+)
-* **Build & Dependências:** Maven / Gradle
+* **Build & Dependências:** Maven ([`pom.xml`](pom.xml) na raiz) — *a confirmar com o grupo*
 * **Framework de Testes:** JUnit 5, Mockito, PIT Mutation Testing, JaCoCo
 * **Automação de Sistema:** Selenium / Robot / TestNG
 * **Análise Estática:** SonarQube / SonarCloud
 * **Gestão de Testes Manuais:** TestLink
+
+---
+
+## Como Executar
+
+Requer **JDK 17+** e **Maven**. Todos os comandos rodam a partir da raiz do repositório —
+o SUT carrega as imagens com caminhos relativos (`new File("src/*.png")`), então o
+diretório de trabalho importa.
+
+```bash
+mvn clean test                                    # executa a suíte de testes
+mvn clean test jacoco:report                      # + relatório de cobertura
+mvn test-compile org.pitest:pitest-maven:mutationCoverage   # teste de mutação
+mvn compile exec:java -Dexec.mainClass=br.Launch  # abre o jogo
+```
+
+### Relatórios
+
+Os relatórios são **regerados a cada build** e saem em `target/`, que não é versionado —
+HTML gerado em repositório compartilhado só produz conflito de merge.
+
+| Relatório | Caminho gerado |
+| :--- | :--- |
+| Cobertura (JaCoCo) | `target/site/jacoco/index.html` |
+| Mutação (PIT) | `target/pit-reports/index.html` |
+
+Na **hora de entregar**, copiar para os caminhos que este README linka como artefatos:
+
+```bash
+mkdir -p docs/reports && rm -rf docs/reports/coverage docs/reports/mutation
+cp -r target/site/jacoco docs/reports/coverage
+cp -r target/pit-reports docs/reports/mutation
+```
+
+### Notas sobre o build
+
+* **Encoding misto.** A maior parte dos `.java` está em **ISO-8859-1**, mas
+  `Display.java` e `Background.java` foram convertidos para UTF-8. O `pom.xml` declara
+  ISO-8859-1, que é o único valor sob o qual tudo compila — trocar para UTF-8 quebra os
+  demais arquivos. Vale padronizar o conjunto em algum momento.
+* Os testes rodam em modo *headless* e desenham em `BufferedImage`, sem abrir janela.
+* Para adicionar os testes das demais classes, basta criar os arquivos em
+  `src/test/java/br/...`. Nenhuma alteração no `pom.xml` é necessária.
