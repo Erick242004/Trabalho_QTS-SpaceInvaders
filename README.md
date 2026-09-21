@@ -44,8 +44,8 @@ Todas as entregas estão organizadas na branch principal (`main` / `master`) con
   * [ ] `Game` · [ ] `AudioPlayer` · [ ] `Level1State` · [ ] `Level2State`
 * [ ] **Casos de Testes Manuais:**
 * [x] Caso de teste do sistema: Progressão e mecânicas do primeiro nível: [`PDF`](docs/manual-tests/TestLevel1State.docx.pdf)
-  * [x] Cenário exportado do **TestLink**: [`PDF`](docs/manual-tests/CT01-GameLoop-TestLink.pdf)
-  * [x] Caso de teste de sistema da classe `Ship`: [`PDF`](docs/manual-tests/CT02-Ship-CasoDeTesteSistema.pdf) — 20 passos executados em 20/09/2026, 19 passaram e 1 falhou
+* [x] Cenário exportado do **TestLink**: [`PDF`](docs/manual-tests/CT01-GameLoop-TestLink.pdf)
+* [x] Caso de teste de sistema da classe `Ship`: [`PDF`](docs/manual-tests/CT02-Ship-CasoDeTesteSistema.pdf) — 20 passos executados em 20/09/2026, 19 passaram e 1 falhou
 * [x] **Registro de Bugs / Bugs Tracking:** [Aba Issues do Repositório](../../issues?q=is%3Aissue)
 
 ---
